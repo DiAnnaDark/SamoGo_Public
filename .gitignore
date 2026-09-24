@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+
+# Local databases
+data/
+*.db
+*.db-shm
+*.db-wal
+
+# IDE / OS
+.idea/
+*.iml
+.DS_Store
+
+# Tests / build
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+build/
+dist/
+*.egg-info/
