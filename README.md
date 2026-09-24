@@ -1,71 +1,114 @@
 # SamoGo
 
-> A simple VK community automation platform — currently in development.
+> **Community automation should feel simple, even when the system behind it is not.**
 
-**SamoGo** is a platform for simplifying user-generated content management in VK communities.
+**SamoGo** is a commercial product currently in development for simplifying user-generated content management in VK communities.
 
-The product is designed around one central idea: community management and everyday automation should be understandable even for people with no technical background.
+The platform is being designed around a simple experience: connect a community and manage routine content workflows from one place — without requiring users to understand automation systems or technical integrations.
 
-After connecting a VK community, SamoGo is intended to bring routine content workflows into one simple interface:
+Planned product areas include:
 
 - collecting user-generated content;
 - creating and publishing posts;
-- scheduling publications;
+- publication scheduling;
 - conversational automation through a community bot.
-
-## Product idea
-
-Community automation tools can become complicated very quickly.
-
-SamoGo takes the opposite approach: hide technical complexity behind a simple product experience.
-
-The goal is not to make users learn automation systems, workflows or integrations. The goal is to let them configure what they need and let the platform handle the routine.
 
 **Настроил. И само пошло.**
 
-## Status
+## Product principle
 
-🚧 **SamoGo is currently in active development.**
+Automation tools can become complicated very quickly. SamoGo takes the opposite approach: technical complexity belongs inside the platform, not in the user's workflow.
 
-The private repository contains the complete product implementation and ongoing experiments.
+The goal is to make everyday community management approachable for non-technical users while keeping the underlying backend structured enough to support automation and integrations as the product grows.
 
-This public repository is a limited portfolio showcase. It contains selected implementation examples and intentionally excludes production credentials and configuration, complete VK integration details, unreleased product workflows, commercial logic, the internal roadmap and production infrastructure.
+## Development status
 
-## Public code sample
+🚧 **Active development / early MVP**
 
-The current public sample focuses on a self-contained authentication subsystem rather than SamoGo's unreleased product workflows.
+The complete product is developed in a private repository.
 
-It demonstrates:
+This repository is intentionally a **portfolio showcase**, not the full SamoGo source tree. It publishes a small, real backend subsystem so the implementation style can be reviewed without exposing unreleased workflows, detailed VK integration, commercial logic or the internal roadmap.
 
-- one-time login codes with expiration;
+## Selected backend sample: authentication lifecycle
+
+The public code sample is a self-contained authentication subsystem taken from the developing product. It is deliberately infrastructure-oriented rather than a disclosure of SamoGo's product-defining workflows.
+
+```text
+Login request
+     │
+     ▼
+One-time code
+     │  hashed at rest
+     ▼
+Verification ──► attempt / expiry checks
+     │
+     ▼
+User + session
+     │  session token hashed at rest
+     ▼
+Authentication / logout
+```
+
+The sample demonstrates:
+
+- one-time login codes with a 10-minute lifetime;
 - invalidation of previous active codes;
-- attempt limiting;
-- hashed OTP and session-token storage;
+- a five-attempt verification limit;
+- hashed OTP storage;
+- hashed session-token storage;
 - session expiration and revocation;
 - normalized user identity;
 - SQLite constraints and foreign keys;
-- automated tests around security-sensitive behavior.
+- tests for security-sensitive lifecycle behavior.
+
+### Code layout
+
+```text
+app/
+├── auth/
+│   ├── service.py       # authentication rules and lifecycle
+│   └── repository.py    # persistence boundary
+└── db/
+    └── database.py      # SQLite schema and transactions
+
+tests/
+├── test_auth_service.py
+└── test_auth_database.py
+```
 
 ## What this repository demonstrates
 
+This showcase is intended to make several engineering qualities directly inspectable:
+
 - Python backend development;
-- separation of application logic and persistence;
-- authentication lifecycle design;
-- state and expiry handling;
-- SQLite persistence;
-- automated backend testing;
-- development of a commercial product from concept toward a working MVP.
+- separation of application logic from persistence;
+- explicit authentication lifecycle and state handling;
+- expiry, one-time-use and attempt-limit rules;
+- relational constraints and transactional persistence;
+- automated tests around important invariants;
+- product development from concept toward a working MVP.
 
-## Stack
+## Technology
 
-**Python 3.12 · FastAPI · SQLite · pytest/unittest · VK integration in the private product**
+**Public sample:** Python 3.12 · SQLite · unittest  
+**Private product:** FastAPI · Uvicorn · Jinja2 · JavaScript · HTML/CSS · VK integration
 
-## Commercial project boundary
+## What remains private
 
-SamoGo is an independently developed commercial product.
+SamoGo is an independently developed commercial product. The public repository therefore intentionally excludes:
 
-The complete source code, unreleased product design, detailed VK integration, product roadmap and proprietary workflow logic remain private.
+- the complete application source;
+- detailed VK connection and integration flows;
+- unreleased user-generated-content workflows;
+- product-specific automation behavior;
+- production configuration and credentials;
+- production infrastructure;
+- commercial logic and the internal roadmap.
 
-This repository exists to demonstrate selected engineering work without publishing the implementation that defines the product's competitive behavior.
+The boundary is intentional: this repository shows **how the backend is engineered** without publishing the implementation that defines the product's competitive behavior.
 
-No open-source license is granted by this repository.
+## Source availability
+
+This repository is published for portfolio and code-review purposes.
+
+**No open-source license is granted.** The complete SamoGo product and unreleased product design remain private.
